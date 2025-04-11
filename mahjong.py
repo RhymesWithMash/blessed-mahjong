@@ -18,6 +18,7 @@ sanma_tiles = ['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', # sou
 
 kokushi_musou = {'s1', 's9', 'p1', 'p9', 'm1', 'm9', 'n0', 'e0', 'z0', 'w0', 'r0', 'g0', 'w0'}
 
+# Change main as you like. There are many fuctions in this code to simulate different kinds of games.
 def main():
     iterations = 500_000
     # stats = simulate_sanma_sp(iterations)
@@ -275,99 +276,6 @@ def check_chiitoitsu(hand):
 def check_kokushi(hand):
     hand_set = set(hand)
     return hand_set == kokushi_musou
-
-# HERE LIES MY VALIANT ATTEMPT AT CHECKING FOR DOUBLE RIICHI IN AN EFFICIENT MANNER. 
-# I TRIED FOR HOURS BEFORE RESIGNING TO THE SIMPLE BRUTE FORCE SOLUTION.
-# RIP EFFICIENCY
-[
-# def check_double_riichi(hand):
-#     def analyze_last_three(remainder):
-#         if(len(remainder) > 3):
-#             return False
-
-#         # If we have a pair
-#         if remainder[0] == remainder[1] or remainder[1] == remainder[2]: # no need to check if 0 != 2 because the hand is sorted
-#             return True
-#         # If we have two consecutive tiles or separated by 1
-#         if are_consecutive_tiles(remainder[0], remainder[1]) or are_consecutive_tiles(remainder[1], remainder[2]): # same deal as above if statement
-#             return True
-
-#         # If we don't have either, then we dont have a wait
-#         return False
-
-#     hand.sort()
-#     triplet_blocks = []
-    
-#     for i in range(len(hand)):
-#         # First, look for tanki wait
-#         working_hand = hand[:]   # reset hand
-#         try:
-#             pair_block, remainder = find_pair_stupid(working_hand, i)
-#         except LookupError: # pair not found, therefore we must have tanki wait with all sequences (or invalid)
-#             for i in range(4):
-#                 try:
-#                     block, remainder = split_block(working_hand)
-#                 except KeyError:
-#                     return False # no pair and no blocks. invalid
-#                 triplet_blocks.append(block)
-#             return True # if we get here, we've found 4 sequences, therefore the last two make a tanki wait. valid!
-
-#         # If we reach this code, we have a pair. Try to make 3 triplets out of 4
-#         triplet_blocks = []
-#         for i in range(3):
-#             try:
-#                 block, remainder = split_block_dr(remainder)
-#             except KeyError:
-#                 continue # move on
-#             triplet_blocks.append(block)
-        
-#         if(analyze_last_three(remainder)):
-#             return True
-#     return False
-
-# def are_consecutive_tiles(tile1, tile2):
-#     if tile1[0] != tile2[0]: return False
-#     if int(tile1[1]) + 1 == int(tile2[1]): return True
-#     if int(tile1[1]) - 1 == int(tile2[1]): return True
-#     if int(tile1[1]) + 2 == int(tile2[1]): return True
-#     if int(tile1[1]) - 2 == int(tile2[1]): return True
-#     return False
-
-# def split_block_dr(hand):
-#     for i in range(len(hand) - 2): # start with the lowest value
-#         if(hand.count(hand[i]) >= 3): # if it occurs three or more times, it must be in a triplet
-#             # Split a triplet
-#             tile1 = hand[i]
-#             tile2 = hand[i + 1]
-#             tile3 = hand[i + 2]
-#             if(tile1 == tile2 and tile1 == tile3): # triplet
-#                 return [hand.pop(i), hand.pop(i), hand.pop(i)], hand
-#         else:
-#             # Split a sequence
-#             tile1 = hand[i]
-#             tile2 = tile1[0] + str(int(tile1[1]) + 1)
-#             tile3 = tile2[0] + str(int(tile2[1]) + 1)
-#             if(tile1 in hand and tile2 in hand and tile3 in hand):
-#                 hand.remove(tile1)
-#                 hand.remove(tile2)
-#                 hand.remove(tile3)
-#                 return [tile1, tile2, tile3], hand
-
-#     raise KeyError("Unable to split off a block.")
-
-# def find_pair_stupid(hand, start_index):
-#     pair_block = []
-
-#     for i in range(start_index, len(hand) - 1): # sliding window!
-#         if int(hand[i][1]) == int(hand[i + 1][1]) and hand[i][0] == hand[i+1][0]:
-#             pair_block = [hand.pop(i), hand.pop(i)]
-#             break
-    
-#     if(len(pair_block) == 0):
-#         raise LookupError("Pair not found!")
-    
-#     return pair_block, hand
-]
 
 # Checks if a 13-tile hand is tenpai (yonma)
 def is_tenpai_yonma(hand):
